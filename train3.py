@@ -11,10 +11,11 @@ file_path = '../data/mergedData/total_10_SMOTE.csv'
 df = pd.read_csv(file_path)
 
 # 分离特征和标签
-features = ['flow_duration', 'Header_Length', 'Protocol Type', 'Duration', 'Rate',
-            'Srate', 'ack_count', 'syn_count', 'fin_count', 'urg_count',
-            'rst_count', 'Tot sum', 'Min', 'Max', 'AVG', 'Tot size', 'IAT',
-            'Magnitue', 'Covariance', 'Variance']
+# 加载选定的特征列表
+with open('model_info.pkl', 'rb') as file:
+    model_info = pickle.load(file)
+features = model_info['selected_features']
+
 X = df[features]
 y = df.iloc[:, -1]  # 最后一列
 
@@ -31,7 +32,7 @@ rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
 rf_classifier.fit(X_train, y_train)
 
 # 导出训练好的模型
-model_file = '../models/train3.pkl'
+model_file = '../models/train3_.pkl'
 with open(model_file, 'wb') as file:
     pickle.dump(rf_classifier, file)
 

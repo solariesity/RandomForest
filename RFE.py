@@ -5,9 +5,10 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.feature_selection import RFE
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
+import pickle
 
 # 加载数据集
-file_path = '../data/cleanedData/part-00059-363d1ba3-8ab5-4f96-bc25-4d5862db7cb9-c000.csv'
+file_path = '../data/mergedData/total_10.csv'
 df = pd.read_csv(file_path)
 
 # 分离特征和标签
@@ -23,7 +24,7 @@ model = LogisticRegression(max_iter=1000, solver='saga')
 
 # 应用RFE
 # 选择前n个特征，假设我们想选择前n个重要特征
-n_features_to_select = 45
+n_features_to_select = 30
 rfe = RFE(estimator=model, n_features_to_select=n_features_to_select)
 rfe.fit(X_scaled, y)
 
@@ -57,3 +58,16 @@ plt.xlabel('Ranking')
 plt.ylabel('Features')
 plt.gca().invert_yaxis()  # 排名从1开始，因此应将y轴倒置
 plt.show()
+
+# 保存RFE对象到文件
+with open('rfe_model.pkl', 'wb') as file:
+    pickle.dump(rfe, file)
+
+# 保存模型和选定特征列表
+model_info = {
+    'model': final_model,
+    'selected_features': selected_features.tolist()
+}
+
+with open('model_info.pkl', 'wb') as file:
+    pickle.dump(model_info, file)

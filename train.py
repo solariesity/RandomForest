@@ -19,7 +19,7 @@ y = df.iloc[:, -1]  # 最后一列
 print(y.value_counts())
 
 # 拆分数据为训练集和测试集
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.02, train_size=0.08, random_state=42)
 
 # 初始化随机森林分类器
 rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -28,9 +28,9 @@ rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
 rf_classifier.fit(X_train, y_train)
 
 # 导出训练好的模型
-# model_file = '../models/train_sample.pkl'
-# with open(model_file, 'wb') as file:
-#     pickle.dump(rf_classifier, file)
+model_file = '../models/train.pkl'
+with open(model_file, 'wb') as file:
+    pickle.dump(rf_classifier, file)
 
 # 进行预测
 y_pred = rf_classifier.predict(X_test)
